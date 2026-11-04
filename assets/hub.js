@@ -1,22 +1,25 @@
 /* Works · the door and the words it answers to.
  *
- * The door is the hall with the lights out: the works hang on a dark wall and
- * one light drifts round them. It stands in front of the hall when the address
- * has no hash and this browser has not chosen to skip it (decided in <head>
- * before the first paint).
+ * The door is the hall with the lights out: it is only darkness and one
+ * drifting light laid over the hall's own wall, so when the lights come on the
+ * works are exactly where the light found them. It stands in front of the hall
+ * when the address has no hash and this browser has not chosen to skip it
+ * (decided in <head> before the first paint).
  *
  * Tonight's challenge changes every day (Korea time). Any work's code (RRG) or
  * number (01) is a countersign: the light goes to that work and it opens in a
  * new tab. WORKS, an empty answer or Esc turns the lights on and walks into the
  * hall; GITHUB opens the repositories. In the hall, typing DOOR or 0 turns the
- * lights out again, and a code or number scrolls to its piece. #works, #rrg,
- * #01 … skip the door; #door forces it.
+ * lights out again, and a code or number finds its work: on the wall while the
+ * wall is in view, otherwise in the wall texts. #works, #rrg, #01 … skip the
+ * door; #door forces it.
  */
 (function () {
   'use strict';
 
   var root = document.documentElement;
   var hall = document.getElementById('hall');
+  var wall = document.getElementById('wall');
   var door = document.getElementById('door');
   var form = document.getElementById('door-form');
   var input = document.getElementById('door-word');
@@ -127,7 +130,7 @@
   }
 
   function aimAt(work) {
-    var el = door.querySelector('.hang[data-id="' + work.id + '"]');
+    var el = document.getElementById('hang-' + work.id);
     if (!el) return;
     var r = el.getBoundingClientRect();
     aim({ x: r.left + r.width / 2, y: r.top + r.height / 2 }, 2600);
@@ -182,6 +185,8 @@
   function openDoor(animate) {
     window.clearTimeout(leaving);
     leaving = 0;
+    if (window.scrollY) window.scrollTo(0, 0);
+    root.classList.remove('lights');
     door.classList.remove('leaving');
     if (animate && !reduceMotion) door.classList.add('lights-on');
     root.classList.add('door-open');
@@ -203,7 +208,7 @@
 
   function finish() {
     leaving = 0;
-    root.classList.remove('door-open');
+    root.classList.remove('door-open', 'lights');
     door.classList.remove('lights-on', 'leaving');
     hall.removeAttribute('aria-hidden');
     hall.inert = false;
@@ -215,6 +220,7 @@
     if (!root.classList.contains('door-open') || leaving) return;
     input.blur();
     if (reduceMotion) { finish(); return; }
+    root.classList.add('lights');
     door.classList.add('lights-on');
     leaving = window.setTimeout(function () {
       door.classList.add('leaving');
@@ -265,13 +271,21 @@
   });
 
   /* ---- in the hall: words typed anywhere ---- */
+  var found = null;
+  var foundTimer = 0;
   function locate(work) {
-    var el = document.getElementById(work.id);
+    var frame = document.getElementById('hang-' + work.id);
+    var text = document.getElementById('text-' + work.id);
+    var onWall = frame && wall.getBoundingClientRect().bottom > window.innerHeight * 0.5;
+    var el = onWall ? frame : text;
     if (!el) return;
-    el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    if (!onWall) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    if (found) found.classList.remove('is-found');
+    window.clearTimeout(foundTimer);
+    found = el;
     el.classList.add('is-found');
-    window.setTimeout(function () { el.classList.remove('is-found'); }, 1800);
-    var link = el.querySelector('.frame');
+    foundTimer = window.setTimeout(function () { el.classList.remove('is-found'); found = null; }, 2600);
+    var link = onWall ? el : el.querySelector('.open');
     if (link) link.focus({ preventScroll: true });
   }
 

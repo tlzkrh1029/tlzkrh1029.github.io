@@ -31,31 +31,182 @@ img { display: block; max-width: 100%; height: auto; }
 .icon { flex: none; }
 :focus-visible { outline: 2px solid var(--txt); outline-offset: 4px; }
 
-/* ---------- the hall ---------- */
-/* The hall runs nearly edge to edge: the side margins grow with the screen
-   (4vw, at most 80px) and only very wide screens (over 2080px) get extra air. */
-.wrap {
-  max-width: 2080px;
-  margin: 0 auto;
-  padding: 0 clamp(20px, 4vw, 80px) 120px;
+/* ---------- the hall: one lit wall, then the wall texts ---------- */
+html { scrollbar-gutter: stable; }
+
+/* The wall is shared: the door is this same wall with the lights out, so the
+   frames hang exactly where the light found them. Each frame is placed by its
+   centre (--x, --y, percent of the wall) and sized by --w, percent of the wall
+   width; on screens wider than 1.95:1 the size follows the height instead, so
+   the slight overlaps never grow. */
+.wall {
+  --pad: clamp(8px, 0.75vw, 14px);
+  --cap: 1.95svh;
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  min-height: 520px;
+  overflow: hidden;
+  background: radial-gradient(130% 95% at 50% -12%, #24221D 0%, #191814 48%, #121110 100%);
+}
+.hangs { position: absolute; inset: 0; }
+.hang {
+  --size: min(calc(var(--w) * 1%), calc(var(--w) * var(--cap)));
+  position: absolute;
+  left: calc(var(--x) * 1% - var(--size) / 2);
+  top: calc(var(--y) * 1% - var(--size) * 0.375 - var(--pad) * 0.25);
+  width: var(--size);
+  padding: var(--pad);
+  background: var(--mat);
+  box-shadow: inset 0 0 0 1px rgba(237, 235, 230, 0.06), 0 34px 64px -30px rgba(0, 0, 0, 0.92);
+  color: var(--txt);
+  text-decoration: none;
+  outline: 2px solid transparent;
+  outline-offset: 5px;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.45s ease, outline-color 0.3s ease;
+}
+.hang img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: top; }
+.p1 { --x: 18;   --y: 30.5; --w: 28.5; }
+.p2 { --x: 44.2; --y: 22;   --w: 21.7; }
+.p3 { --x: 68.4; --y: 28.4; --w: 24.6; }
+.p4 { --x: 92.4; --y: 22.3; --w: 20.2; }
+.p5 { --x: 12.5; --y: 69.4; --w: 22.4; }
+.p6 { --x: 37.3; --y: 66;   --w: 24.6; }
+.p7 { --x: 61.4; --y: 68.4; --w: 21; }
+.p8 { --x: 84.9; --y: 65.7; --w: 24; }
+.p9 { --x: 90.7; --y: 91.6; --w: 16.5; }
+@media (orientation: portrait) {
+  .wall { --cap: 0.56svh; }
+  .p1 { --x: 31;   --y: 17.3; --w: 54; }
+  .p2 { --x: 79;   --y: 11.9; --w: 34; }
+  .p3 { --x: 78.5; --y: 29.7; --w: 39; }
+  .p4 { --x: 28;   --y: 39.6; --w: 44; }
+  .p5 { --x: 74;   --y: 49.6; --w: 44; }
+  .p6 { --x: 27;   --y: 60.9; --w: 46; }
+  .p7 { --x: 75;   --y: 70.3; --w: 42; }
+  .p8 { --x: 29;   --y: 81.9; --w: 46; }
+  .p9 { --x: 76;   --y: 89.6; --w: 38; }
+}
+
+/* A paper label pinned across the bottom edge of each frame: number and word.
+   In the dark the passing light picks them out; in the hall, hovering a frame
+   adds its title. */
+.tag {
+  position: absolute;
+  z-index: 3;
+  left: calc(var(--pad) + 4px);
+  bottom: 0;
+  transform: translateY(50%);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 5px 9px 4px;
+  background: #ECE8DF;
+  color: #17140D;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  line-height: 1.1;
+  white-space: nowrap;
+  box-shadow: 0 10px 18px -10px rgba(0, 0, 0, 0.75);
+}
+.p9 .tag { top: 0; bottom: auto; transform: translateY(-50%); }
+.tag .tno { font-family: var(--display); font-style: italic; font-size: 16px; letter-spacing: 0; line-height: 0.9; }
+.tag .ttitle { display: none; font-family: var(--serif); font-size: 13px; font-weight: 500; letter-spacing: 0; }
+.tag .icon { display: none; align-self: center; }
+.hang:hover, .hang:focus-visible, .hang.is-found {
+  z-index: 10;
+  transform: translateY(-6px);
+  box-shadow: inset 0 0 0 1px rgba(237, 235, 230, 0.14), 0 50px 90px -34px rgba(0, 0, 0, 0.95);
+}
+.hang:hover .ttitle, .hang:focus-visible .ttitle, .hang.is-found .ttitle,
+.hang:hover .tag .icon, .hang:focus-visible .tag .icon, .hang.is-found .tag .icon { display: inline; }
+.hang:focus-visible { outline-color: var(--txt); }
+.hang.is-found { outline-color: var(--gold); }
+/* Hovering one frame dims the rest, as the light did at the door. The shade is
+   a layer over the picture rather than a filter, so the labels stay on top. */
+.hang::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 11, 10, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+.hangs:has(.hang:hover) .hang:not(:hover)::after { opacity: 1; }
+
+.wall-pool {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse min(600px, 88vw) min(320px, 40svh) at 50% 50%, rgba(14, 13, 11, 0.86) 0, rgba(14, 13, 11, 0.6) 46%, rgba(14, 13, 11, 0) 100%),
+    linear-gradient(to bottom, rgba(14, 13, 11, 0.72) 0, rgba(14, 13, 11, 0) 92px),
+    linear-gradient(to top, rgba(14, 13, 11, 0.8) 0, rgba(14, 13, 11, 0) 110px);
+  transition: opacity 0.6s ease;
+}
+.wall-title {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
   display: flex;
   flex-direction: column;
-  gap: clamp(96px, 6vw, 120px);
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 0 20px;
+  text-align: center;
+  pointer-events: none;
+  transition: opacity 0.6s ease 0.15s;
 }
-.mast {
+.wall-title h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(88px, 11vw, 184px);
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 60px rgba(11, 11, 10, 0.85), 0 0 18px rgba(11, 11, 10, 0.7);
+}
+.wall-title .lede { font-size: clamp(17px, calc(1.4vw + 12px), 21px); text-shadow: 0 0 22px rgba(11, 11, 10, 0.95), 0 0 6px rgba(11, 11, 10, 0.9); }
+.eyebrow { margin: 0; font-size: 12px; letter-spacing: 0.24em; color: var(--mute); }
+.wall-title .eyebrow { color: var(--soft); text-shadow: 0 0 12px rgba(11, 11, 10, 0.95); }
+.lede {
+  margin: 0;
+  max-width: 540px;
+  font-family: var(--serif);
+  font-size: 21px;
+  line-height: 1.6;
+  color: var(--soft);
+}
+
+.wall-edge {
+  position: absolute;
+  z-index: 6;
+  left: 0;
+  right: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 12px 24px;
-  padding-top: 24px;
+  gap: 4px 24px;
+  padding: 0 clamp(20px, 4vw, 48px);
   font-size: 12px;
   letter-spacing: 0.16em;
   color: var(--mute);
+  text-shadow: 0 0 14px rgba(11, 11, 10, 0.95), 0 0 4px rgba(11, 11, 10, 0.9);
+  pointer-events: none;
+  transition: opacity 0.6s ease 0.15s;
 }
+.wall-edge a, .wall-edge button { pointer-events: auto; }
+.wall-top { top: 0; padding-top: 14px; }
+.wall-bottom { bottom: 0; padding-bottom: 14px; letter-spacing: 0.12em; justify-content: center; }
 .mast nav { display: flex; align-items: center; gap: 24px; }
 .mast nav a,
-.mast nav .link {
+.mast nav .link,
+.wall-bottom a {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -65,92 +216,89 @@ img { display: block; max-width: 100%; height: auto; }
   background: none;
   color: var(--txt);
   font: inherit;
-  letter-spacing: 0.16em;
+  letter-spacing: inherit;
   text-decoration: none;
   cursor: pointer;
 }
-.mast nav .link:hover { color: #FFFFFF; }
+.mast nav .link:hover, .wall-bottom a:hover { color: #FFFFFF; }
+@media (max-width: 560px) {
+  .wall-top .mast-mid { display: none; }
+}
 
-.intro {
+/* While the door stands, the wall shows only its frames; the hall's own words
+   come up with the lights. */
+html.door-open .wall-pool,
+html.door-open .wall-title,
+html.door-open .wall-edge { opacity: 0; }
+html.door-open.lights .wall-pool,
+html.door-open.lights .wall-title,
+html.door-open.lights .wall-edge { opacity: 1; }
+
+/* ---------- the wall texts ---------- */
+.wrap {
+  max-width: 2080px;
+  margin: 0 auto;
+  padding: clamp(88px, 8vw, 140px) clamp(20px, 4vw, 80px) 120px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 22px;
-  margin-top: -24px;
-  text-align: center;
+  gap: clamp(96px, 7vw, 140px);
 }
-.eyebrow { margin: 0; font-size: 12px; letter-spacing: 0.24em; color: var(--mute); }
-.eyebrow.gold { color: var(--gold); }
-.intro h1 {
+.texts { display: flex; flex-direction: column; gap: clamp(40px, 4vw, 64px); }
+.texts-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 460px);
+  align-items: end;
+  gap: 18px 48px;
+}
+.texts-head .eyebrow { grid-column: 1 / -1; }
+.texts-head h2 {
   margin: 0;
   font-family: var(--display);
   font-weight: 400;
-  font-size: clamp(88px, 12vw, 184px);
-  line-height: 0.86;
-  letter-spacing: -0.02em;
+  font-size: clamp(56px, 6vw, 104px);
+  line-height: 0.9;
+  letter-spacing: -0.015em;
 }
-.intro .lede {
+.texts-note { margin: 0; font-family: var(--serif); font-size: 18px; line-height: 1.6; color: var(--soft); }
+.text-list {
+  list-style: none;
   margin: 0;
-  max-width: 560px;
-  font-family: var(--serif);
-  font-size: 21px;
-  line-height: 1.6;
-  color: var(--soft);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 56px clamp(36px, 3vw, 64px);
 }
-
-.frame {
-  display: block;
-  background: var(--mat);
-  box-shadow: inset 0 0 0 1px rgba(237, 235, 230, 0.06), 0 44px 80px -44px rgba(0, 0, 0, 0.9);
-  outline: 2px solid transparent;
-  outline-offset: 6px;
-  transition: box-shadow 0.5s ease, outline-color 0.3s ease;
+.text {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 18px;
+  row-gap: 10px;
+  align-content: start;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  scroll-margin: 120px;
+  transition: border-color 0.3s ease;
 }
-.frame img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  object-position: top;
-  outline: 1px solid rgba(237, 235, 230, 0.10);
-  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.frame:hover { box-shadow: inset 0 0 0 1px rgba(237, 235, 230, 0.16), 0 60px 100px -40px rgba(0, 0, 0, 0.95); }
-.frame:hover img { transform: scale(1.015); }
-.frame:focus-visible { outline-color: var(--txt); }
-.piece { display: flex; flex-direction: column; gap: 22px; min-width: 0; scroll-margin: 32px; }
-.piece.is-found .frame { outline-color: var(--gold); }
-
-/* The screenshots are 800px wide, so the large frame stops at 1040px and the
-   wall label beside it takes the rest of the row. */
-.hero { flex-direction: row; flex-wrap: wrap; align-items: flex-end; gap: 32px clamp(56px, 4vw, 96px); }
-.hero .frame { flex: 999 1 640px; min-width: 0; max-width: 1040px; padding: clamp(18px, 3vw, 44px); }
-.hero .label { flex: 1 1 300px; display: flex; flex-direction: column; gap: 16px; padding-bottom: 6px; }
-.hero .label > * { max-width: 520px; }
-.no-big {
+.text > :not(.tno) { grid-column: 2; }
+.text .tno {
+  grid-row: 1 / span 4;
   font-family: var(--display);
   font-style: italic;
-  font-size: clamp(76px, 5vw, 100px);
+  font-size: 44px;
   line-height: 0.9;
-  color: var(--gold);
+  color: var(--mute);
+  transition: color 0.3s ease;
 }
-.hero h2 {
-  margin: 0;
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: clamp(38px, 2.6vw, 50px);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-}
-.hero .desc { font-size: clamp(18px, 1vw, 20px); }
+.text h3 { margin: 0; font-family: var(--serif); font-weight: 600; font-size: clamp(21px, 1.3vw, 25px); line-height: 1.25; }
 .meta { margin: 0; font-size: 13px; letter-spacing: 0.06em; color: var(--mute); }
-.desc { margin: 0; font-family: var(--serif); font-size: 18px; line-height: 1.6; color: var(--soft); }
+.desc { margin: 0; font-family: var(--serif); font-size: 17px; line-height: 1.6; color: var(--soft); }
+.links { margin: 6px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
 .open {
   display: inline-flex;
-  align-self: flex-start;
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  padding: 0 20px;
+  padding: 0 18px;
   border: 1px solid rgba(237, 235, 230, 0.30);
   border-radius: 999px;
   font-size: 14px;
@@ -158,28 +306,16 @@ img { display: block; max-width: 100%; height: auto; }
   text-decoration: none;
 }
 .open:hover { border-color: rgba(237, 235, 230, 0.6); }
-
-.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(520px, 100%), 1fr)); gap: 72px clamp(48px, 3.6vw, 72px); }
-/* Three across from 1200px up, so six works always fill two whole rows. */
-.trip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 72px clamp(36px, 2.6vw, 56px); }
+.word { font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; color: var(--mute); }
+.text.is-found { border-color: var(--gold); }
+.text.is-found .tno { color: var(--gold); }
 @media (max-width: 1199px) {
-  .trip { grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr)); gap: 72px 36px; }
+  .text-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-.pair .frame { padding: clamp(18px, 2.6vw, 36px); }
-.trip .frame { padding: clamp(22px, 1.4vw, 30px); }
-.plabel {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  column-gap: 14px;
-  row-gap: 8px;
-  align-items: baseline;
+@media (max-width: 719px) {
+  .text-list { grid-template-columns: minmax(0, 1fr); }
+  .texts-head { grid-template-columns: minmax(0, 1fr); }
 }
-.plabel .no { font-family: var(--display); font-style: italic; font-size: 28px; line-height: 1; color: var(--mute); }
-.plabel h3 { margin: 0; font-family: var(--serif); font-weight: 600; font-size: clamp(21px, 1.2vw, 24px); line-height: 1.3; }
-.plabel .meta,
-.plabel .desc { grid-column: 2; }
-.pair .plabel h3 { font-size: clamp(26px, 1.6vw, 31px); }
-.pair .desc { max-width: 560px; font-size: 17px; }
 
 .storage { display: flex; flex-direction: column; gap: 40px; padding-top: 36px; border-top: 1px solid var(--line); }
 .storage-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 24px 48px; }
@@ -191,50 +327,20 @@ img { display: block; max-width: 100%; height: auto; }
 .storage li .icon { color: var(--mute); }
 .hint { margin: 0; font-family: var(--mono); font-size: 12px; line-height: 1.7; letter-spacing: 0.06em; color: var(--mute); }
 
-/* ---------- the door: the hall with the lights out ---------- */
+/* ---------- the door: the same wall with the lights out ---------- */
 .door {
   position: fixed;
   inset: 0;
   z-index: 50;
   display: none;
   overflow: hidden;
-  background: #0B0B0A;
+  background: transparent;
   color: var(--txt);
   transition: opacity 0.36s ease;
 }
 html.door-open { overflow: hidden; }
 html.door-open .door { display: block; }
 .door.leaving { opacity: 0; }
-
-.door-wall { position: absolute; inset: 0; background: #151411; }
-.hang {
-  position: absolute;
-  padding: 12px;
-  background: var(--mat);
-  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
-}
-.hang img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: top; }
-.p1 { left: 4.86%; top: 10.67%; width: 26.39%; }
-.p2 { left: 34.17%; top: 7.11%; width: 20.14%; }
-.p3 { left: 56.94%; top: 11.56%; width: 22.92%; }
-.p4 { left: 83.06%; top: 7.78%; width: 18.75%; }
-.p5 { left: 2.08%; top: 54%; width: 20.83%; }
-.p6 { left: 25.83%; top: 47.78%; width: 22.92%; }
-.p7 { left: 51.67%; top: 52.44%; width: 19.44%; }
-.p8 { left: 73.75%; top: 48.67%; width: 22.22%; }
-.p9 { left: 83.06%; top: 79.56%; width: 15.28%; }
-@media (orientation: portrait) {
-  .hang { padding: 8px; }
-  .p1 { left: 4%; top: 7%; width: 54%; }
-  .p2 { left: 62%; top: 5%; width: 34%; }
-  .p3 { left: 59%; top: 22%; width: 39%; }
-  .p4 { left: 6%; top: 31%; width: 44%; }
-  .p5 { left: 52%; top: 41%; width: 44%; }
-  .p6 { left: 4%; top: 52%; width: 46%; }
-  .p7 { left: 54%; top: 62%; width: 42%; }
-  .p8 { left: 6%; top: 73%; width: 46%; }
-  .p9 { left: 57%; top: 82%; width: 38%; }
-}
 
 .door-dark { position: absolute; inset: 0; overflow: hidden; pointer-events: none; transition: opacity 0.65s ease; }
 .beam {
