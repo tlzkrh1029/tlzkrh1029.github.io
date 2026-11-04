@@ -98,7 +98,11 @@ html { scrollbar-gutter: stable; }
    top gets that much more). The left and right padding take away each
    plate's own side bearings (--lsb, --rsb from build.py), so the ink sits 4px
    from the border on those sides too. In the dark the passing light catches
-   the plate. */
+   the plate. Instrument Serif has no bold, so the gold number and word are
+   thickened with a 0.42px stroke in their own colour. The stroke reaches
+   0.21px past each outline, so the side padding gets 0.21px more; the top
+   and bottom padding were measured on screen at 2x to 4x so the thickened
+   letters sit level, 4px from the border. */
 .tag {
   position: absolute;
   z-index: 3;
@@ -108,7 +112,7 @@ html { scrollbar-gutter: stable; }
   display: inline-flex;
   align-items: baseline;
   gap: 5px;
-  padding: 2.96px calc(4px - var(--rsb, 0em)) 2.35px calc(4px - var(--lsb, 0em));
+  padding: 2.96px calc(4.21px - var(--rsb, 0em)) 2.85px calc(4.21px - var(--lsb, 0em));
   background: linear-gradient(180deg, #24201A 0%, #16140F 100%);
   border: 1px solid rgba(230, 179, 76, 0.34);
   color: #C9A866;
@@ -121,10 +125,11 @@ html { scrollbar-gutter: stable; }
   transition: border-color 0.3s ease, color 0.3s ease;
 }
 @supports (text-box: trim-both cap alphabetic) {
-  .tag { padding-top: calc(4px + 0.01em); padding-bottom: 4px; }
+  .tag { padding-top: calc(4px + 0.01em); padding-bottom: 4.5px; }
   .tag .tno, .tag .tcode, .tag .ttitle { text-box: trim-both cap alphabetic; }
 }
 .p9 .tag { top: 0; bottom: auto; transform: translateY(-50%); }
+.tag .tno, .tag .tcode { -webkit-text-stroke: 0.42px currentColor; }
 .tag .tno { letter-spacing: 0; }
 .tag .tcode { margin-right: -0.04em; }   /* no letter-spacing after the last letter */
 .tag .ttitle { display: none; font-family: var(--serif); font-size: 11px; font-weight: 500; letter-spacing: 0; color: var(--txt); }
