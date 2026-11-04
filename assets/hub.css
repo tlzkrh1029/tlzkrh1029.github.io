@@ -89,8 +89,8 @@ html { scrollbar-gutter: stable; }
 }
 
 /* A small brass plate on the bottom-left corner of each frame: number and
-   word in gold. In the dark the passing light catches it; in the hall,
-   hovering a frame adds its title. */
+   word in the same gold italic, sitting on one baseline. In the dark the
+   passing light catches it; in the hall, hovering a frame adds its title. */
 .tag {
   position: absolute;
   z-index: 3;
@@ -98,24 +98,25 @@ html { scrollbar-gutter: stable; }
   bottom: 0;
   transform: translateY(50%);
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 5px;
-  padding: 3px 7px 2px;
+  padding: 4px 7px 1px;
   background: linear-gradient(180deg, #24201A 0%, #16140F 100%);
   border: 1px solid rgba(230, 179, 76, 0.34);
   color: #C9A866;
-  font-family: var(--mono);
-  font-size: 8.5px;
-  letter-spacing: 0.22em;
-  line-height: 1.2;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  line-height: 1;
   white-space: nowrap;
   box-shadow: 0 6px 12px -8px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 236, 190, 0.07);
   transition: border-color 0.3s ease, color 0.3s ease;
 }
 .p9 .tag { top: 0; bottom: auto; transform: translateY(-50%); }
-.tag .tno { font-family: var(--display); font-style: italic; font-size: 12px; letter-spacing: 0; line-height: 0.9; }
-.tag .ttitle { display: none; font-family: var(--serif); font-size: 11px; font-weight: 500; letter-spacing: 0; color: var(--txt); }
-.tag .icon { display: none; width: 10px; height: 10px; color: var(--txt); }
+.tag .tno { font-size: 12.5px; letter-spacing: 0; }
+.tag .ttitle { display: none; font-family: var(--serif); font-style: normal; font-size: 11px; font-weight: 500; letter-spacing: 0; color: var(--txt); }
+.tag .icon { display: none; align-self: center; width: 10px; height: 10px; color: var(--txt); }
 .hang:hover .tag, .hang:focus-visible .tag, .hang.is-found .tag { border-color: rgba(230, 179, 76, 0.8); color: var(--gold); }
 .hang:hover, .hang:focus-visible, .hang.is-found {
   z-index: 10;
