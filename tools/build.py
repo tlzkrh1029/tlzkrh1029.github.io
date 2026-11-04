@@ -4,12 +4,14 @@
 Run from anywhere:  python3 tools/build.py
 The first work becomes the large piece, the next two the pair, the rest the
 row of smaller frames. Codes and numbers in works.json are the words the door
-and the hall answer to.
+and the hall answer to. The first nine works also hang on the dark wall
+behind the door.
 """
+import hashlib
 import html
 import json
 import os
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
@@ -23,6 +25,14 @@ ARROW = ('<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="non
 LOCK = ('<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
         'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
         '<rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>')
+HANG_SLOTS = 9
+SEOUL = timezone(timedelta(hours=9))
+
+
+def stamp(rel):
+    """Add a short content hash to an asset path, so a fresh page never pairs with a stale cached file."""
+    with open(os.path.join(ROOT, rel), 'rb') as f:
+        return '%s?v=%s' % (rel, hashlib.sha1(f.read()).hexdigest()[:8])
 
 
 def E(s):
@@ -77,9 +87,12 @@ def piece(w, with_desc, eager=False):
     return '\n'.join(parts)
 
 
-def key_row(no, code, name):
-    return ('<div class="krow"><span class="kno">%s</span><span class="kcode">%s</span><span class="kname">%s</span></div>'
-            % (no, E(code), E(name)))
+def challenge_today(site):
+    """Tonight's challenge word as of build time (the page recomputes it daily)."""
+    today = datetime.now(SEOUL).date()
+    words = site['challenges']
+    i = (today - date.fromisoformat(site['challenge_epoch'])).days % len(words)
+    return words[i], ('%s %d %s %d' % (today.strftime('%a'), today.day, today.strftime('%b'), today.year)).upper()
 
 
 def build():
@@ -88,13 +101,17 @@ def build():
     n, s = len(works), len(storage)
     year = site['updated'][:4]
     lede = '%s web pages and artifacts made with Claude and ChatGPT, on view in one dark room.' % word(n).capitalize()
-    door_lede = '%s pages made with Claude and ChatGPT, kept in one dark room. Give the word, or walk straight in.' % word(n).capitalize()
     js_data = json.dumps({'github': site['github'],
+                          'epoch': site['challenge_epoch'],
+                          'challenges': site['challenges'],
                           'works': [{k: w[k] for k in ('id', 'no', 'code', 'title', 'url')} for w in works]},
                          ensure_ascii=False).replace('</', '<\\/')
-    keys = [key_row('%02d' % w['no'], w['code'], w['short']) for w in works]
-    keys += [key_row('', 'WORKS', 'The whole hall'), key_row('', 'GITHUB', 'The repositories')]
     stored = '\n'.join('<li>%s%s</li>' % (LOCK, E(x['title'])) for x in storage)
+    tonight, today_label = challenge_today(site)
+    hang = '\n'.join('<div class="hang p%d" data-id="%s"><img src="%s" alt="" width="800" height="600" decoding="async"></div>'
+                     % (i + 1, E(w['id']), E(w['shot'])) for i, w in enumerate(works[:HANG_SLOTS]))
+    codes = '\n<span aria-hidden="true">·</span>\n'.join(
+        '<button type="button" class="code" data-word="%s">%s</button>' % (E(w['code']), E(w['code'])) for w in works)
 
     page = '\n'.join([
         '<!doctype html>',
@@ -104,25 +121,25 @@ def build():
         '<meta name="viewport" content="width=device-width, initial-scale=1">',
         '<title>%s · %s</title>' % (E(site['title']), E(site['owner'])),
         '<meta name="description" content="%s">' % E(lede),
-        '<meta name="theme-color" content="#0F0F0E">',
+        '<meta name="theme-color" content="#0B0B0A">',
         '<meta property="og:type" content="website">',
         '<meta property="og:title" content="%s · %s">' % (E(site['title']), E(site['owner'])),
         '<meta property="og:description" content="%s">' % E(lede),
         '<meta property="og:url" content="%s">' % E(site['url']),
-        '<meta property="og:image" content="%sassets/og.jpg">' % E(site['url']),
+        '<meta property="og:image" content="%s%s">' % (E(site['url']), stamp('assets/og.jpg')),
         '<meta name="twitter:card" content="summary_large_image">',
         '<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">',
         '<link rel="preconnect" href="https://fonts.googleapis.com">',
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
         '<link rel="stylesheet" href="%s">' % E(FONTS),
-        '<link rel="stylesheet" href="assets/hub.css">',
+        '<link rel="stylesheet" href="%s">' % stamp('assets/hub.css'),
         '<script>',
         '/* Decide before the first paint whether the door stands in front of the hall. */',
         '(function(){var h=location.hash.slice(1).toLowerCase(),skip=false;'
         'try{skip=localStorage.getItem("hub-door")==="skip";}catch(e){}'
         'if(h==="door"||(!h&&!skip))document.documentElement.classList.add("door-open");})();',
         '</script>',
-        '<script src="assets/hub.js" defer></script>',
+        '<script src="%s" defer></script>' % stamp('assets/hub.js'),
         '</head>',
         '<body>',
         '<div class="hall" id="hall">',
@@ -161,47 +178,47 @@ def build():
         '</footer>',
         '</div>',
         '</div>',
-        '<div class="door" id="door" role="dialog" aria-modal="true" aria-labelledby="door-title">',
-        '<p class="door-behind">Behind this door: the hall itself, blurred until you walk in.</p>',
-        '<section class="door-panel">',
-        '<div class="door-mast">',
+        '<div class="door" id="door" role="dialog" aria-modal="true" aria-label="%s, the door">' % E(site['title']),
+        '<div class="door-wall" aria-hidden="true">',
+        hang,
+        '</div>',
+        '<div class="door-dark" aria-hidden="true"><div class="beam" id="beam"></div></div>',
+        '<div class="door-pool" aria-hidden="true"></div>',
+        '<header class="door-edge door-top">',
         '<span>%s · %s</span>' % (E(site['owner'].upper()), E(site['title'].upper())),
-        '<span class="pill"><span class="dot" aria-hidden="true"></span>%d ON VIEW · %d IN STORAGE</span>' % (n, s),
-        '</div>',
-        '<div class="door-hero">',
-        '<p class="eyebrow gold">AFTER HOURS</p>',
-        '<h1 id="door-title">%s</h1>' % E(site['title']),
-        '<span class="rule" aria-hidden="true"></span>',
-        '<p class="lede">%s</p>' % E(door_lede),
-        '</div>',
-        '<form class="word" id="door-form" autocomplete="off">',
-        '<label for="door-word">THE WORD</label>',
-        '<div class="field">',
-        '<span class="prompt" aria-hidden="true">&gt;</span>',
-        '<input id="door-word" name="word" type="text" placeholder="RRG, 01, WORKS" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go">',
-        '<button type="submit" class="key">ENTER</button>',
+        '<span>SENTRY POST · <span id="door-date">%s</span></span>' % E(today_label),
+        '</header>',
+        '<main class="door-stage">',
+        '<div class="stage">',
+        '<span class="lamp" aria-hidden="true"></span>',
+        '<p class="door-eyebrow">TONIGHT’S CHALLENGE</p>',
+        '<h1 class="challenge"><span id="challenge">%s</span>?</h1>' % E(tonight),
+        '<form class="answer-form" id="door-form" autocomplete="off">',
+        '<label for="door-word">YOUR COUNTERSIGN</label>',
+        '<div class="answer">',
+        '<input id="door-word" name="word" type="text" maxlength="12" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go">',
+        '<span class="mirror" aria-hidden="true"><span id="mirror"></span><span class="caret"></span></span>',
         '</div>',
         '<p class="said" id="door-said" aria-live="polite"></p>',
         '</form>',
-        '<div class="door-actions">',
-        '<button type="button" class="enter" id="door-enter">ENTER THE GALLERY<span class="disc" aria-hidden="true">%s</span></button>' % ARROW,
+        '<p class="door-lede">Answer with a work’s word and the light goes to it. Answer <button type="button" class="inline" id="door-enter">WORKS</button> and the lights come on.</p>',
+        '<p class="codes">',
+        codes,
+        '</p>',
         '<label class="skip"><input type="checkbox" id="door-skip">Skip this door next time on this browser</label>',
-        '<p class="note">Deep links such as #works, #rrg or #01 walk past this door. In the hall, type DOOR or 0 to come back.</p>',
         '</div>',
-        '<details class="field-key" open>',
-        '<summary>FIELD KEY</summary>',
-        '<div class="krows">',
-        '\n'.join(keys),
-        '</div>',
-        '</details>',
-        '</section>',
+        '</main>',
+        '<footer class="door-edge door-bottom">',
+        '<span>A NEW CHALLENGE EVERY NIGHT</span>',
+        '<span>%d ON VIEW · %d IN STORAGE</span>' % (n, s),
+        '</footer>',
         '</div>',
         '<script type="application/json" id="works-data">%s</script>' % js_data,
         '</body>',
         '</html>',
         ''])
     open(os.path.join(ROOT, 'index.html'), 'w', encoding='utf-8').write(page)
-    print('index.html: %d works, %d in storage' % (n, s))
+    print('index.html: %d works, %d in storage, tonight %s' % (n, s, tonight))
 
 
 if __name__ == '__main__':

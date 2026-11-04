@@ -5,23 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Works · tlzkrh1029</title>
 <meta name="description" content="Nine web pages and artifacts made with Claude and ChatGPT, on view in one dark room.">
-<meta name="theme-color" content="#0F0F0E">
+<meta name="theme-color" content="#0B0B0A">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Works · tlzkrh1029">
 <meta property="og:description" content="Nine web pages and artifacts made with Claude and ChatGPT, on view in one dark room.">
 <meta property="og:url" content="https://tlzkrh1029.github.io/">
-<meta property="og:image" content="https://tlzkrh1029.github.io/assets/og.jpg">
+<meta property="og:image" content="https://tlzkrh1029.github.io/assets/og.jpg?v=497e57ae">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Newsreader:wght@500;600&amp;family=DM+Sans:wght@400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap">
-<link rel="stylesheet" href="assets/hub.css">
+<link rel="stylesheet" href="assets/hub.css?v=ec995fd2">
 <script>
 /* Decide before the first paint whether the door stands in front of the hall. */
 (function(){var h=location.hash.slice(1).toLowerCase(),skip=false;try{skip=localStorage.getItem("hub-door")==="skip";}catch(e){}if(h==="door"||(!h&&!skip))document.documentElement.classList.add("door-open");})();
 </script>
-<script src="assets/hub.js" defer></script>
+<script src="assets/hub.js?v=0f6d3553" defer></script>
 </head>
 <body>
 <div class="hall" id="hall">
@@ -135,51 +135,65 @@
 </footer>
 </div>
 </div>
-<div class="door" id="door" role="dialog" aria-modal="true" aria-labelledby="door-title">
-<p class="door-behind">Behind this door: the hall itself, blurred until you walk in.</p>
-<section class="door-panel">
-<div class="door-mast">
+<div class="door" id="door" role="dialog" aria-modal="true" aria-label="Works, the door">
+<div class="door-wall" aria-hidden="true">
+<div class="hang p1" data-id="rrg"><img src="assets/shots/rrg.jpg" alt="" width="800" height="600" decoding="async"></div>
+<div class="hang p2" data-id="macro"><img src="assets/shots/macro.jpg" alt="" width="800" height="600" decoding="async"></div>
+<div class="hang p3" data-id="sector"><img src="assets/shots/sector.jpg" alt="" width="800" height="600" decoding="async"></div>
+<div class="hang p4" data-id="monitor"><img src="assets/shots/monitor.jpg" alt="" width="800" height="600" decoding="async"></div>
+<div class="hang p5" data-id="breakout"><img src="assets/shots/breakout.jpg" alt="" width="800" height="600" decoding="async"></div>
+<div class="hang p6" data-id="hynix"><img src="assets/shots/hynix.jpg" alt="" width="800" height="600" decoding="async"></div>
+<div class="hang p7" data-id="etf"><img src="assets/shots/etf.jpg" alt="" width="800" height="600" decoding="async"></div>
+<div class="hang p8" data-id="wma"><img src="assets/shots/wma.jpg" alt="" width="800" height="600" decoding="async"></div>
+<div class="hang p9" data-id="readnote"><img src="assets/shots/readnote.jpg" alt="" width="800" height="600" decoding="async"></div>
+</div>
+<div class="door-dark" aria-hidden="true"><div class="beam" id="beam"></div></div>
+<div class="door-pool" aria-hidden="true"></div>
+<header class="door-edge door-top">
 <span>TLZKRH1029 · WORKS</span>
-<span class="pill"><span class="dot" aria-hidden="true"></span>9 ON VIEW · 3 IN STORAGE</span>
-</div>
-<div class="door-hero">
-<p class="eyebrow gold">AFTER HOURS</p>
-<h1 id="door-title">Works</h1>
-<span class="rule" aria-hidden="true"></span>
-<p class="lede">Nine pages made with Claude and ChatGPT, kept in one dark room. Give the word, or walk straight in.</p>
-</div>
-<form class="word" id="door-form" autocomplete="off">
-<label for="door-word">THE WORD</label>
-<div class="field">
-<span class="prompt" aria-hidden="true">&gt;</span>
-<input id="door-word" name="word" type="text" placeholder="RRG, 01, WORKS" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go">
-<button type="submit" class="key">ENTER</button>
+<span>SENTRY POST · <span id="door-date">WED 4 NOV 2026</span></span>
+</header>
+<main class="door-stage">
+<div class="stage">
+<span class="lamp" aria-hidden="true"></span>
+<p class="door-eyebrow">TONIGHT’S CHALLENGE</p>
+<h1 class="challenge"><span id="challenge">Lantern</span>?</h1>
+<form class="answer-form" id="door-form" autocomplete="off">
+<label for="door-word">YOUR COUNTERSIGN</label>
+<div class="answer">
+<input id="door-word" name="word" type="text" maxlength="12" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go">
+<span class="mirror" aria-hidden="true"><span id="mirror"></span><span class="caret"></span></span>
 </div>
 <p class="said" id="door-said" aria-live="polite"></p>
 </form>
-<div class="door-actions">
-<button type="button" class="enter" id="door-enter">ENTER THE GALLERY<span class="disc" aria-hidden="true"><svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"></path><path d="M8 7h9v9"></path></svg></span></button>
+<p class="door-lede">Answer with a work’s word and the light goes to it. Answer <button type="button" class="inline" id="door-enter">WORKS</button> and the lights come on.</p>
+<p class="codes">
+<button type="button" class="code" data-word="RRG">RRG</button>
+<span aria-hidden="true">·</span>
+<button type="button" class="code" data-word="MAC">MAC</button>
+<span aria-hidden="true">·</span>
+<button type="button" class="code" data-word="SEC">SEC</button>
+<span aria-hidden="true">·</span>
+<button type="button" class="code" data-word="MON">MON</button>
+<span aria-hidden="true">·</span>
+<button type="button" class="code" data-word="BRK">BRK</button>
+<span aria-hidden="true">·</span>
+<button type="button" class="code" data-word="HYX">HYX</button>
+<span aria-hidden="true">·</span>
+<button type="button" class="code" data-word="ETF">ETF</button>
+<span aria-hidden="true">·</span>
+<button type="button" class="code" data-word="WMA">WMA</button>
+<span aria-hidden="true">·</span>
+<button type="button" class="code" data-word="NOTE">NOTE</button>
+</p>
 <label class="skip"><input type="checkbox" id="door-skip">Skip this door next time on this browser</label>
-<p class="note">Deep links such as #works, #rrg or #01 walk past this door. In the hall, type DOOR or 0 to come back.</p>
 </div>
-<details class="field-key" open>
-<summary>FIELD KEY</summary>
-<div class="krows">
-<div class="krow"><span class="kno">01</span><span class="kcode">RRG</span><span class="kname">Weekly RRG</span></div>
-<div class="krow"><span class="kno">02</span><span class="kcode">MAC</span><span class="kname">Macro Risk Library</span></div>
-<div class="krow"><span class="kno">03</span><span class="kcode">SEC</span><span class="kname">Sector Concentration</span></div>
-<div class="krow"><span class="kno">04</span><span class="kcode">MON</span><span class="kname">Monitoring Hub</span></div>
-<div class="krow"><span class="kno">05</span><span class="kcode">BRK</span><span class="kname">Breakout Map</span></div>
-<div class="krow"><span class="kno">06</span><span class="kcode">HYX</span><span class="kname">SK hynix</span></div>
-<div class="krow"><span class="kno">07</span><span class="kcode">ETF</span><span class="kname">ETF Rebalance</span></div>
-<div class="krow"><span class="kno">08</span><span class="kcode">WMA</span><span class="kname">WMA Screener</span></div>
-<div class="krow"><span class="kno">09</span><span class="kcode">NOTE</span><span class="kname">Reading Notes</span></div>
-<div class="krow"><span class="kno"></span><span class="kcode">WORKS</span><span class="kname">The whole hall</span></div>
-<div class="krow"><span class="kno"></span><span class="kcode">GITHUB</span><span class="kname">The repositories</span></div>
+</main>
+<footer class="door-edge door-bottom">
+<span>A NEW CHALLENGE EVERY NIGHT</span>
+<span>9 ON VIEW · 3 IN STORAGE</span>
+</footer>
 </div>
-</details>
-</section>
-</div>
-<script type="application/json" id="works-data">{"github": "https://github.com/tlzkrh1029", "works": [{"id": "rrg", "no": 1, "code": "RRG", "title": "Weekly RRG", "url": "https://tlzkrh1029.github.io/rrg/"}, {"id": "macro", "no": 2, "code": "MAC", "title": "Macro Risk Library", "url": "https://claude.ai/artifact/B3yefn3d7waqxu7k3joyT1"}, {"id": "sector", "no": 3, "code": "SEC", "title": "Korea Sector Concentration", "url": "https://claude.ai/artifact/4LBee5JqRFiFdt18KJYx5p"}, {"id": "monitor", "no": 4, "code": "MON", "title": "Monitoring Hub", "url": "https://tlzkrh1029.github.io/chatgpt-dot-monitoring-hub/"}, {"id": "breakout", "no": 5, "code": "BRK", "title": "Breakout Map", "url": "https://claude.ai/artifact/AMAB2TMoSxwXPuLPWjtjGB"}, {"id": "hynix", "no": 6, "code": "HYX", "title": "SK hynix, After the Headline", "url": "https://claude.ai/artifact/Y4hwK4vNuP7HoKTJpxWw94"}, {"id": "etf", "no": 7, "code": "ETF", "title": "ETF Rebalance Tracker", "url": "https://tlzkrh1029.github.io/etf-rebalancing-tracker/"}, {"id": "wma", "no": 8, "code": "WMA", "title": "WMA Market Screener", "url": "https://tlzkrh1029.github.io/wma0.3-screenshot/"}, {"id": "readnote", "no": 9, "code": "NOTE", "title": "Reading Notes · Maekyung Economy No. 2374", "url": "https://claude.ai/artifact/BbcAmMEhpbkvUMAUYhJaCW"}]}</script>
+<script type="application/json" id="works-data">{"github": "https://github.com/tlzkrh1029", "epoch": "2026-11-04", "challenges": ["Lantern", "Vellum", "Ember", "Harbor", "Meridian", "Graphite", "Cinder", "Vesper", "Juniper", "Lodestar", "Obsidian", "Saffron", "Tinder", "Umber", "Wicket", "Zenith", "Beacon", "Quarry", "Orchard", "Halcyon", "Marrow", "Pewter", "Larkspur", "Ironwood", "Quill", "Tallow", "Cobalt", "Sable", "Thistle", "Citadel", "Ferrule", "Gossamer", "Hearth", "Inkwell", "Jasper", "Kestrel", "Lichen", "Moraine", "Nocturne", "Ochre", "Parapet", "Quartz", "Rampart", "Sextant", "Tundra", "Undertow", "Verdigris", "Willow", "Yarrow", "Zephyr", "Almanac", "Bastion", "Cairn", "Dovetail", "Estuary", "Foundry", "Gantry", "Hollow", "Isthmus", "Jetty"], "works": [{"id": "rrg", "no": 1, "code": "RRG", "title": "Weekly RRG", "url": "https://tlzkrh1029.github.io/rrg/"}, {"id": "macro", "no": 2, "code": "MAC", "title": "Macro Risk Library", "url": "https://claude.ai/artifact/B3yefn3d7waqxu7k3joyT1"}, {"id": "sector", "no": 3, "code": "SEC", "title": "Korea Sector Concentration", "url": "https://claude.ai/artifact/4LBee5JqRFiFdt18KJYx5p"}, {"id": "monitor", "no": 4, "code": "MON", "title": "Monitoring Hub", "url": "https://tlzkrh1029.github.io/chatgpt-dot-monitoring-hub/"}, {"id": "breakout", "no": 5, "code": "BRK", "title": "Breakout Map", "url": "https://claude.ai/artifact/AMAB2TMoSxwXPuLPWjtjGB"}, {"id": "hynix", "no": 6, "code": "HYX", "title": "SK hynix, After the Headline", "url": "https://claude.ai/artifact/Y4hwK4vNuP7HoKTJpxWw94"}, {"id": "etf", "no": 7, "code": "ETF", "title": "ETF Rebalance Tracker", "url": "https://tlzkrh1029.github.io/etf-rebalancing-tracker/"}, {"id": "wma", "no": 8, "code": "WMA", "title": "WMA Market Screener", "url": "https://tlzkrh1029.github.io/wma0.3-screenshot/"}, {"id": "readnote", "no": 9, "code": "NOTE", "title": "Reading Notes · Maekyung Economy No. 2374", "url": "https://claude.ai/artifact/BbcAmMEhpbkvUMAUYhJaCW"}]}</script>
 </body>
 </html>
