@@ -17,7 +17,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
          'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen',
          'nineteen', 'twenty']
-FONTS = ('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:wght@500;600'
+FONTS = ('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,wght@0,500;0,600;1,500'
          '&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap')
 ARROW = ('<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
          'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
