@@ -89,14 +89,16 @@ html { scrollbar-gutter: stable; }
 }
 
 /* A small brass plate on the bottom-left corner of each frame: number and
-   word in one gold italic on one baseline; on hover the title joins them in
-   the text serif's italic, in white. Each run of lettering is trimmed to its
-   cap height and its baseline, so the space between the lettering and the
-   border is the same 4px above and below (the figures rise 0.01em above the
-   capitals, so the top gets that much more). The left and right padding
-   take away each plate's own side bearings (--lsb, --rsb from build.py), so
-   the ink sits 4px from the border on those sides too. In the dark the
-   passing light catches the plate. */
+   word in gold on one baseline; on hover the title joins them in the text
+   serif, in white. All three are upright and the same size: Instrument Serif
+   at 10.33px has the cap height of Newsreader at 11px (0.72em against
+   0.676em). Each run of lettering is trimmed to its cap height and its
+   baseline, so the space between the lettering and the border is the same
+   4px above and below (the figures rise 0.01em above the capitals, so the
+   top gets that much more). The left and right padding take away each
+   plate's own side bearings (--lsb, --rsb from build.py), so the ink sits 4px
+   from the border on those sides too. In the dark the passing light catches
+   the plate. */
 .tag {
   position: absolute;
   z-index: 3;
@@ -106,13 +108,12 @@ html { scrollbar-gutter: stable; }
   display: inline-flex;
   align-items: baseline;
   gap: 5px;
-  padding: 2.9px calc(4px - var(--rsb, 0em)) 2.1px calc(4px - var(--lsb, 0em));
+  padding: 2.96px calc(4px - var(--rsb, 0em)) 2.35px calc(4px - var(--lsb, 0em));
   background: linear-gradient(180deg, #24201A 0%, #16140F 100%);
   border: 1px solid rgba(230, 179, 76, 0.34);
   color: #C9A866;
   font-family: var(--display);
-  font-style: italic;
-  font-size: 12px;
+  font-size: 10.33px;
   letter-spacing: 0.04em;
   line-height: 1;
   white-space: nowrap;
@@ -126,10 +127,10 @@ html { scrollbar-gutter: stable; }
 .p9 .tag { top: 0; bottom: auto; transform: translateY(-50%); }
 .tag .tno { letter-spacing: 0; }
 .tag .tcode { margin-right: -0.04em; }   /* no letter-spacing after the last letter */
-.tag .ttitle { display: none; font-family: var(--serif); font-style: italic; font-size: 11px; font-weight: 500; letter-spacing: 0; color: var(--txt); }
+.tag .ttitle { display: none; font-family: var(--serif); font-size: 11px; font-weight: 500; letter-spacing: 0; color: var(--txt); }
 .tag .icon { display: none; align-self: center; width: 10px; height: 10px; color: var(--txt); }
-/* On hover the arrow ends the plate; its ink sits 2.5px inside its 10px box. */
-.hang:hover .tag, .hang:focus-visible .tag, .hang.is-found .tag { border-color: rgba(230, 179, 76, 0.8); color: var(--gold); padding-right: 1.5px; }
+/* On hover the arrow ends the plate; its ink sits about 2.1px inside its 10px box. */
+.hang:hover .tag, .hang:focus-visible .tag, .hang.is-found .tag { border-color: rgba(230, 179, 76, 0.8); color: var(--gold); padding-right: 1.9px; }
 .hang:hover, .hang:focus-visible, .hang.is-found {
   z-index: 10;
   transform: translateY(-6px);
