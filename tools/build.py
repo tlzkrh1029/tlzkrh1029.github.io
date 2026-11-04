@@ -56,7 +56,7 @@ def meta(w):
 
 
 def hang(w, i):
-    """One frame on the wall, with its paper label (number, word, and the short title on hover)."""
+    """One frame on the wall, with its brass plate (number and word; the short title joins on hover)."""
     return ('<a class="hang p%d" id="hang-%s" data-id="%s" href="%s" target="_blank" rel="noopener" '
             'aria-label="%02d %s, opens in a new tab">'
             '<img src="%s" alt="" width="800" height="600" decoding="async"%s>'
