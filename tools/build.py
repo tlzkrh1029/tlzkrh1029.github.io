@@ -17,7 +17,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
          'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen',
          'nineteen', 'twenty']
-FONTS = ('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:wght@500;600'
+FONTS = ('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,wght@0,500;0,600;1,500'
          '&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap')
 ARROW = ('<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
          'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
@@ -29,6 +29,17 @@ LOCK = ('<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none
         'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
         '<rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>')
 HANG_SLOTS = 9
+# Side bearings of Instrument Serif Italic, in em: how far the ink of a glyph
+# sits inside (positive) or past (negative) its own box. The plate pads its
+# first figure and its last letter by these, so the gap between the border and
+# the ink is the same 4px on the left and right as above and below.
+LEFT_BEARING = {'0': 0.048, '1': -0.05, '2': -0.036, '3': -0.022, '4': 0.003, '5': -0.032, '6': 0.032, '7': 0.031,
+                '8': 0.011, '9': -0.005}
+RIGHT_BEARING = {'A': 0.039, 'B': -0.006, 'C': -0.042, 'D': 0.005, 'E': -0.045, 'F': -0.075, 'G': -0.018, 'H': -0.085,
+                 'I': -0.085, 'J': -0.084, 'K': -0.105, 'L': 0.029, 'M': -0.071, 'N': -0.088, 'O': 0.005, 'P': -0.04,
+                 'Q': 0.006, 'R': 0.003, 'S': -0.022, 'T': -0.085, 'U': -0.093, 'V': -0.122, 'W': -0.122, 'X': -0.074,
+                 'Y': -0.123, 'Z': -0.074, '0': -0.001, '1': -0.015, '2': -0.035, '3': -0.011, '4': -0.019,
+                 '5': -0.074, '6': -0.057, '7': -0.1, '8': -0.026, '9': -0.017}
 SEOUL = timezone(timedelta(hours=9))
 
 
@@ -60,10 +71,12 @@ def hang(w, i):
     return ('<a class="hang p%d" id="hang-%s" data-id="%s" href="%s" target="_blank" rel="noopener" '
             'aria-label="%02d %s, opens in a new tab">'
             '<img src="%s" alt="" width="800" height="600" decoding="async"%s>'
-            '<span class="tag" aria-hidden="true"><span class="tno">%02d</span><span class="tcode">%s</span>'
+            '<span class="tag" aria-hidden="true" style="--lsb: %sem; --rsb: %sem"><span class="tno">%02d</span><span class="tcode">%s</span>'
             '<span class="ttitle">%s</span>%s</span></a>'
             % (i + 1, E(w['id']), E(w['id']), E(w['url']), w['no'], E(w['title']), E(w['shot']),
-               ' fetchpriority="high"' if i == 0 else '', w['no'], E(w['code']), E(w['short']), ARROW))
+               ' fetchpriority="high"' if i == 0 else '',
+               LEFT_BEARING.get(('%02d' % w['no'])[0], 0), RIGHT_BEARING.get(w['code'][-1:].upper(), 0),
+               w['no'], E(w['code']), E(w['short']), ARROW))
 
 
 def wall_text(w):
