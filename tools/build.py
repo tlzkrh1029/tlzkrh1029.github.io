@@ -17,7 +17,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
          'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen',
          'nineteen', 'twenty']
-FONTS = ('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:wght@500;600'
+FONTS = ('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:wght@500;600;700'
          '&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap')
 ARROW = ('<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
          'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
@@ -29,17 +29,17 @@ LOCK = ('<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none
         'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
         '<rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>')
 HANG_SLOTS = 9
-# Side bearings of Instrument Serif (upright), in em: how far the ink of a
-# glyph sits inside (positive) or past (negative) its own box. The plate pads
-# its first figure and its last letter by these, so the gap between the
-# border and the ink is the same 4px on the left and right as above and below.
-LEFT_BEARING = {'0': 0.036, '1': 0.005, '2': 0.02, '3': 0.02, '4': 0.01, '5': 0.01, '6': 0.036, '7': 0.018,
-                '8': 0.028, '9': 0.026}
-RIGHT_BEARING = {'A': -0.018, 'B': 0.028, 'C': 0.04, 'D': 0.04, 'E': 0.033, 'F': 0.019, 'G': 0.02, 'H': 0.019,
-                 'I': 0.019, 'J': 0.019, 'K': -0.02, 'L': 0.019, 'M': 0.014, 'N': 0.016, 'O': 0.04, 'P': 0.024,
-                 'Q': 0.0, 'R': -0.01, 'S': 0.03, 'T': 0.012, 'U': 0.012, 'V': -0.018, 'W': -0.018, 'X': 0.019,
-                 'Y': -0.018, 'Z': 0.026, '0': 0.036, '1': 0.01, '2': 0.026, '3': 0.03, '4': 0.014, '5': 0.03,
-                 '6': 0.028, '7': 0.004, '8': 0.028, '9': 0.036}
+# Side bearings of Newsreader Bold, in em: how far the ink of a glyph sits
+# inside (positive) or past (negative) its own box. The plate pads its first
+# figure and its last letter by these, so the gap between the border and the
+# ink is the same 4px on the left and right as above and below.
+LEFT_BEARING = {'0': 0.039, '1': 0.076, '2': 0.051, '3': 0.064, '4': 0.019, '5': 0.059, '6': 0.06, '7': 0.067,
+                '8': 0.057, '9': 0.047}
+RIGHT_BEARING = {'A': -0.01, 'B': 0.035, 'C': 0.038, 'D': 0.04, 'E': 0.026, 'F': 0.011, 'G': 0.015, 'H': 0.037,
+                 'I': 0.036, 'J': 0.021, 'K': -0.013, 'L': 0.013, 'M': 0.017, 'N': 0.029, 'O': 0.04, 'P': 0.017,
+                 'Q': 0.024, 'R': 0.005, 'S': 0.04, 'T': 0.018, 'U': 0.02, 'V': -0.005, 'W': -0.004, 'X': -0.011,
+                 'Y': 0.004, 'Z': 0.019, '0': 0.038, '1': 0.066, '2': 0.058, '3': 0.073, '4': 0.021, '5': 0.065,
+                 '6': 0.049, '7': 0.049, '8': 0.057, '9': 0.062}
 SEOUL = timezone(timedelta(hours=9))
 
 
