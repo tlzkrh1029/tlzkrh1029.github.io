@@ -1,0 +1,133 @@
+{
+  "site": {
+    "owner": "tlzkrh1029",
+    "title": "Works",
+    "url": "https://tlzkrh1029.github.io/",
+    "github": "https://github.com/tlzkrh1029",
+    "updated": "2026-11-04"
+  },
+  "works": [
+    {
+      "id": "rrg",
+      "no": 1,
+      "code": "RRG",
+      "title": "Weekly RRG",
+      "short": "Weekly RRG",
+      "url": "https://tlzkrh1029.github.io/rrg/",
+      "shot": "assets/shots/rrg.jpg",
+      "platform": "GitHub Pages",
+      "tools": ["Claude"],
+      "date": "2026-10-09",
+      "desc": "Eleven sectors against the market and twelve industries against their own sector, redrawn every weekday morning."
+    },
+    {
+      "id": "macro",
+      "no": 2,
+      "code": "MAC",
+      "title": "Macro Risk Library",
+      "short": "Macro Risk Library",
+      "url": "https://claude.ai/artifact/B3yefn3d7waqxu7k3joyT1",
+      "shot": "assets/shots/macro.jpg",
+      "platform": "Claude artifact",
+      "tools": ["Claude"],
+      "date": "2026-11-03",
+      "desc": "Bond and rate study notes shelved volume by volume, each one pointing to the next."
+    },
+    {
+      "id": "sector",
+      "no": 3,
+      "code": "SEC",
+      "title": "Korea Sector Concentration",
+      "short": "Sector Concentration",
+      "url": "https://claude.ai/artifact/4LBee5JqRFiFdt18KJYx5p",
+      "shot": "assets/shots/sector.jpg",
+      "platform": "Claude artifact",
+      "tools": ["Claude"],
+      "date": "2026-10-13",
+      "desc": "How concentrated the Korean market is, set against Taiwan, the US, Japan and China in seventeen charts."
+    },
+    {
+      "id": "monitor",
+      "no": 4,
+      "code": "MON",
+      "title": "Monitoring Hub",
+      "short": "Monitoring Hub",
+      "url": "https://tlzkrh1029.github.io/chatgpt-dot-monitoring-hub/",
+      "shot": "assets/shots/monitor.jpg",
+      "platform": "GitHub Pages",
+      "tools": ["ChatGPT", "Claude"],
+      "date": "2026-11-03",
+      "desc": "Public-source watch across five beats, from macro to on-chain flows, on one board."
+    },
+    {
+      "id": "breakout",
+      "no": 5,
+      "code": "BRK",
+      "title": "Breakout Map",
+      "short": "Breakout Map",
+      "url": "https://claude.ai/artifact/AMAB2TMoSxwXPuLPWjtjGB",
+      "shot": "assets/shots/breakout.jpg",
+      "platform": "Claude artifact",
+      "tools": ["Claude"],
+      "date": "2026-10-31",
+      "desc": "Twenty-day breakouts across US sector ETF holdings, drawn as small multiples."
+    },
+    {
+      "id": "hynix",
+      "no": 6,
+      "code": "HYX",
+      "title": "SK hynix, After the Headline",
+      "short": "SK hynix",
+      "url": "https://claude.ai/artifact/Y4hwK4vNuP7HoKTJpxWw94",
+      "shot": "assets/shots/hynix.jpg",
+      "platform": "Claude artifact",
+      "tools": ["Claude"],
+      "date": "2026-10-13",
+      "desc": "The hourly candles after the stake-sale story, replayed one bar at a time."
+    },
+    {
+      "id": "etf",
+      "no": 7,
+      "code": "ETF",
+      "title": "ETF Rebalance Tracker",
+      "short": "ETF Rebalance",
+      "url": "https://tlzkrh1029.github.io/etf-rebalancing-tracker/",
+      "shot": "assets/shots/etf.jpg",
+      "platform": "GitHub Pages",
+      "tools": ["Claude"],
+      "date": "2026-10-09",
+      "desc": "Weight caps and the countdown to the next rebalance for SOXX, QQQ and IGV."
+    },
+    {
+      "id": "wma",
+      "no": 8,
+      "code": "WMA",
+      "title": "WMA Market Screener",
+      "short": "WMA Screener",
+      "url": "https://tlzkrh1029.github.io/wma0.3-screenshot/",
+      "shot": "assets/shots/wma.jpg",
+      "platform": "GitHub Pages",
+      "tools": ["Claude"],
+      "date": "2026-10-04",
+      "desc": "Coins on Upbit, Bithumb and Binance, sorted by their multiple of the 200-period WMA."
+    },
+    {
+      "id": "readnote",
+      "no": 9,
+      "code": "NOTE",
+      "title": "Reading Notes · Maekyung Economy No. 2374",
+      "short": "Reading Notes",
+      "url": "https://claude.ai/artifact/BbcAmMEhpbkvUMAUYhJaCW",
+      "shot": "assets/shots/readnote.jpg",
+      "platform": "Claude artifact",
+      "tools": ["Claude"],
+      "date": "2026-09-24",
+      "desc": "Only the highlighted passages of one weekly magazine issue, carried over to a single page."
+    }
+  ],
+  "storage": [
+    { "title": "Crypto Briefing Library" },
+    { "title": "TD Sequential Screener" },
+    { "title": "Maekyung Economy Weekly Library" }
+  ]
+}
