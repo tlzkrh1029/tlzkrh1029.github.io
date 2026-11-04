@@ -29,17 +29,17 @@ LOCK = ('<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none
         'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
         '<rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>')
 HANG_SLOTS = 9
-# Side bearings of Instrument Serif (upright), in em: how far the ink of a
-# glyph sits inside (positive) or past (negative) its own box. The plate pads
-# its first figure and its last letter by these, so the gap between the
-# border and the ink is the same 4px on the left and right as above and below.
-LEFT_BEARING = {'0': 0.036, '1': 0.005, '2': 0.02, '3': 0.02, '4': 0.01, '5': 0.01, '6': 0.036, '7': 0.018,
-                '8': 0.028, '9': 0.026}
-RIGHT_BEARING = {'A': -0.018, 'B': 0.028, 'C': 0.04, 'D': 0.04, 'E': 0.033, 'F': 0.019, 'G': 0.02, 'H': 0.019,
-                 'I': 0.019, 'J': 0.019, 'K': -0.02, 'L': 0.019, 'M': 0.014, 'N': 0.016, 'O': 0.04, 'P': 0.024,
-                 'Q': 0.0, 'R': -0.01, 'S': 0.03, 'T': 0.012, 'U': 0.012, 'V': -0.018, 'W': -0.018, 'X': 0.019,
-                 'Y': -0.018, 'Z': 0.026, '0': 0.036, '1': 0.01, '2': 0.026, '3': 0.03, '4': 0.014, '5': 0.03,
-                 '6': 0.028, '7': 0.004, '8': 0.028, '9': 0.036}
+# Side bearings of Instrument Serif Italic, in em: how far the ink of a glyph
+# sits inside (positive) or past (negative) its own box. The plate pads its
+# first figure and its last letter by these, so the gap between the border and
+# the ink is the same 4px on the left and right as above and below.
+LEFT_BEARING = {'0': 0.048, '1': -0.05, '2': -0.036, '3': -0.022, '4': 0.003, '5': -0.032, '6': 0.032, '7': 0.031,
+                '8': 0.011, '9': -0.005}
+RIGHT_BEARING = {'A': 0.039, 'B': -0.006, 'C': -0.042, 'D': 0.005, 'E': -0.045, 'F': -0.075, 'G': -0.018, 'H': -0.085,
+                 'I': -0.085, 'J': -0.084, 'K': -0.105, 'L': 0.029, 'M': -0.071, 'N': -0.088, 'O': 0.005, 'P': -0.04,
+                 'Q': 0.006, 'R': 0.003, 'S': -0.022, 'T': -0.085, 'U': -0.093, 'V': -0.122, 'W': -0.122, 'X': -0.074,
+                 'Y': -0.123, 'Z': -0.074, '0': -0.001, '1': -0.015, '2': -0.035, '3': -0.011, '4': -0.019,
+                 '5': -0.074, '6': -0.057, '7': -0.1, '8': -0.026, '9': -0.017}
 SEOUL = timezone(timedelta(hours=9))
 
 
