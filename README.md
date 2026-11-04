@@ -9,7 +9,7 @@ Claude와 ChatGPT로 만든 웹페이지와 아티팩트를 한곳에 모아 보
 | `works.json` | 작품 목록입니다. 번호, 암구어, 제목, 주소, 스크린샷, 플랫폼, 제작 도구, 날짜, 설명을 적습니다. |
 | `tools/build.py` | `works.json`을 읽어 `index.html`을 만듭니다. |
 | `index.html` | 생성된 페이지입니다. 직접 고치지 않고 `tools/build.py`로 다시 만듭니다. |
-| `assets/hub.css`, `assets/hub.js` | 전시실 화면과 대문 동작입니다. |
+| `assets/hub.css`, `assets/hub.js` | 전시실 화면과 대문 동작입니다. 이 파일을 고친 뒤에도 `tools/build.py`를 다시 실행합니다. 그래야 `index.html`에 붙는 버전 표시(`?v=...`)가 바뀌어서, 방문자의 브라우저가 예전 파일을 쓰지 않습니다. |
 | `assets/shots/` | 작품 스크린샷(800×600)입니다. |
 | `assets/og.jpg`, `assets/favicon.svg` | 링크 미리보기 이미지와 탭 아이콘입니다. |
 

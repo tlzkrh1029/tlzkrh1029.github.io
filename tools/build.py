@@ -7,6 +7,7 @@ row of smaller frames. Codes and numbers in works.json are the words the door
 and the hall answer to. The first nine works also hang on the dark wall
 behind the door.
 """
+import hashlib
 import html
 import json
 import os
@@ -26,6 +27,12 @@ LOCK = ('<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none
         '<rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>')
 HANG_SLOTS = 9
 SEOUL = timezone(timedelta(hours=9))
+
+
+def stamp(rel):
+    """Add a short content hash to an asset path, so a fresh page never pairs with a stale cached file."""
+    with open(os.path.join(ROOT, rel), 'rb') as f:
+        return '%s?v=%s' % (rel, hashlib.sha1(f.read()).hexdigest()[:8])
 
 
 def E(s):
@@ -119,20 +126,20 @@ def build():
         '<meta property="og:title" content="%s · %s">' % (E(site['title']), E(site['owner'])),
         '<meta property="og:description" content="%s">' % E(lede),
         '<meta property="og:url" content="%s">' % E(site['url']),
-        '<meta property="og:image" content="%sassets/og.jpg">' % E(site['url']),
+        '<meta property="og:image" content="%s%s">' % (E(site['url']), stamp('assets/og.jpg')),
         '<meta name="twitter:card" content="summary_large_image">',
         '<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">',
         '<link rel="preconnect" href="https://fonts.googleapis.com">',
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
         '<link rel="stylesheet" href="%s">' % E(FONTS),
-        '<link rel="stylesheet" href="assets/hub.css">',
+        '<link rel="stylesheet" href="%s">' % stamp('assets/hub.css'),
         '<script>',
         '/* Decide before the first paint whether the door stands in front of the hall. */',
         '(function(){var h=location.hash.slice(1).toLowerCase(),skip=false;'
         'try{skip=localStorage.getItem("hub-door")==="skip";}catch(e){}'
         'if(h==="door"||(!h&&!skip))document.documentElement.classList.add("door-open");})();',
         '</script>',
-        '<script src="assets/hub.js" defer></script>',
+        '<script src="%s" defer></script>' % stamp('assets/hub.js'),
         '</head>',
         '<body>',
         '<div class="hall" id="hall">',
