@@ -4,7 +4,16 @@
     "title": "Works",
     "url": "https://tlzkrh1029.github.io/",
     "github": "https://github.com/tlzkrh1029",
-    "updated": "2026-11-04"
+    "updated": "2026-11-04",
+    "challenge_epoch": "2026-11-04",
+    "challenges": [
+      "Lantern", "Vellum", "Ember", "Harbor", "Meridian", "Graphite", "Cinder", "Vesper", "Juniper", "Lodestar",
+      "Obsidian", "Saffron", "Tinder", "Umber", "Wicket", "Zenith", "Beacon", "Quarry", "Orchard", "Halcyon",
+      "Marrow", "Pewter", "Larkspur", "Ironwood", "Quill", "Tallow", "Cobalt", "Sable", "Thistle", "Citadel",
+      "Ferrule", "Gossamer", "Hearth", "Inkwell", "Jasper", "Kestrel", "Lichen", "Moraine", "Nocturne", "Ochre",
+      "Parapet", "Quartz", "Rampart", "Sextant", "Tundra", "Undertow", "Verdigris", "Willow", "Yarrow", "Zephyr",
+      "Almanac", "Bastion", "Cairn", "Dovetail", "Estuary", "Foundry", "Gantry", "Hollow", "Isthmus", "Jetty"
+    ]
   },
   "works": [
     {
