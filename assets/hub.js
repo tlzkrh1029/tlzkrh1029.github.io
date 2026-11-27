@@ -37,8 +37,11 @@
   var STORE = 'hub-door';
 
   /* ---- words ---- */
+  // A word is read without case, spaces, hyphens or underscores: 365_SMA, 365sma and
+  // "365 sma" are the same answer.
+  function plain(s) { return String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
   function read(word) {
-    var w = String(word || '').trim().toUpperCase().replace(/^#/, '');
+    var w = plain(word);
     var i;
     if (w === '' || w === 'WORKS' || w === 'HALL') return { kind: 'enter' };
     if (w === 'GITHUB') return { kind: 'github' };
@@ -48,7 +51,7 @@
       for (i = 0; i < works.length; i++) if (works[i].no === n) return { kind: 'work', work: works[i] };
     }
     for (i = 0; i < works.length; i++) {
-      if (works[i].code.toUpperCase() === w || works[i].id.toUpperCase() === w) return { kind: 'work', work: works[i] };
+      if (plain(works[i].code) === w || plain(works[i].id) === w) return { kind: 'work', work: works[i] };
     }
     return { kind: 'none', word: w };
   }
@@ -296,8 +299,8 @@
     if (e.metaKey || e.ctrlKey || e.altKey || e.isComposing) return;
     var t = e.target;
     if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
-    if (!/^[a-z0-9]$/i.test(e.key)) return;
-    buffer = (buffer + e.key.toUpperCase()).slice(-8);
+    if (!/^[a-z0-9_-]$/i.test(e.key)) return;
+    buffer = (buffer + e.key.toUpperCase()).slice(-16);
     window.clearTimeout(timer);
     timer = window.setTimeout(function () {
       var r = read(buffer);
