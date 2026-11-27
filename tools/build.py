@@ -2,16 +2,19 @@
 """Render index.html from works.json.
 
 Run from anywhere:  python3 tools/build.py
-The first nine works hang on the wall (slots p1 to p9 in assets/hub.css). The
-door is the same wall with the lights out, and the hall is the wall lit, with
-the wall texts below it. Codes and numbers in works.json are the words the
-door and the hall answer to.
+A work with a "slot" (1 to 10) hangs on the wall in that place (p1 to p10 in
+assets/hub.css: p1 to p5 are the top row from left to right, p6 to p10 the
+bottom row); a work without one appears only in the wall texts. The door is
+the same wall with the lights out, and the hall is the wall lit, with the
+wall texts below it in the order of their numbers. Codes and numbers in
+works.json are the words the door and the hall answer to.
 """
 import hashlib
 import html
 import json
 import os
 from datetime import date, datetime, timedelta, timezone
+from urllib.parse import quote
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
@@ -19,6 +22,8 @@ WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight',
          'nineteen', 'twenty']
 FONTS = ('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:wght@500;600'
          '&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap')
+# Korean titles are set in Noto Serif KR, loaded only for the syllables they use.
+KO_FONTS = 'https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&display=swap&text='
 ARROW = ('<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
          'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
          '<path d="M7 17L17 7"></path><path d="M8 7h9v9"></path></svg>')
@@ -28,7 +33,7 @@ DOWN = ('<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none
 LOCK = ('<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
         'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
         '<rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>')
-HANG_SLOTS = 9
+HANG_SLOTS = 10
 # Side bearings of Instrument Serif Italic, in em: how far the ink of a glyph
 # sits inside (positive) or past (negative) its own box. The plate pads its
 # first figure and its last letter by these, so the gap between the border and
@@ -66,15 +71,15 @@ def meta(w):
     return '%s · %s · %s' % (E(w['platform']), E(' + '.join(w['tools'])), nice_date(w['date']))
 
 
-def hang(w, i):
+def hang(w):
     """One frame on the wall, with its brass plate (number and word; the short title joins on hover)."""
     return ('<a class="hang p%d" id="hang-%s" data-id="%s" href="%s" target="_blank" rel="noopener" '
             'aria-label="%02d %s, opens in a new tab">'
             '<img src="%s" alt="" width="800" height="600" decoding="async"%s>'
             '<span class="tag" aria-hidden="true" style="--lsb: %sem; --rsb: %sem"><span class="tno">%02d</span><span class="tcode">%s</span>'
             '<span class="ttitle">%s</span>%s</span></a>'
-            % (i + 1, E(w['id']), E(w['id']), E(w['url']), w['no'], E(w['title']), E(w['shot']),
-               ' fetchpriority="high"' if i == 0 else '',
+            % (w['slot'], E(w['id']), E(w['id']), E(w['url']), w['no'], E(w['title']), E(w['shot']),
+               ' fetchpriority="high"' if w['slot'] == 1 else '',
                LEFT_BEARING.get(('%02d' % w['no'])[0], 0), RIGHT_BEARING.get(w['code'][-1:].upper(), 0),
                w['no'], E(w['code']), E(w['short']), ARROW))
 
@@ -113,7 +118,12 @@ def build():
                          ensure_ascii=False).replace('</', '<\\/')
     stored = '\n'.join('<li>%s%s</li>' % (LOCK, E(x['title'])) for x in storage)
     tonight, today_label = challenge_today(site)
-    hangs = '\n'.join(hang(w, i) for i, w in enumerate(works[:HANG_SLOTS]))
+    hung = sorted((w for w in works if w.get('slot')), key=lambda w: w['slot'])
+    slots = [w['slot'] for w in hung]
+    assert len(set(slots)) == len(slots) and all(1 <= v <= HANG_SLOTS for v in slots), \
+        'each slot from 1 to %d holds at most one work: %s' % (HANG_SLOTS, slots)
+    hangs = '\n'.join(hang(w) for w in hung)
+    hangul = ''.join(sorted({c for w in works for c in w['title'] + w['short'] if '\uac00' <= c <= '\ud7a3'}))
     texts = '\n'.join(wall_text(w) for w in works)
     codes = '\n<span aria-hidden="true">·</span>\n'.join(
         '<button type="button" class="code" data-word="%s">%s</button>' % (E(w['code']), E(w['code'])) for w in works)
@@ -137,6 +147,7 @@ def build():
         '<link rel="preconnect" href="https://fonts.googleapis.com">',
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
         '<link rel="stylesheet" href="%s">' % E(FONTS),
+    ] + (['<link rel="stylesheet" href="%s">' % E(KO_FONTS + quote(hangul))] if hangul else []) + [
         '<link rel="stylesheet" href="%s">' % stamp('assets/hub.css'),
         '<script>',
         '/* Decide before the first paint whether the door stands in front of the hall. */',
@@ -224,7 +235,7 @@ def build():
         '</main>',
         '<footer class="door-edge door-bottom">',
         '<span>A NEW CHALLENGE EVERY NIGHT</span>',
-        '<span>%d ON VIEW · %d IN STORAGE</span>' % (min(n, HANG_SLOTS), s),
+        '<span>%d ON VIEW · %d IN STORAGE</span>' % (len(hung), s),
         '</footer>',
         '</div>',
         '<script type="application/json" id="works-data">%s</script>' % js_data,

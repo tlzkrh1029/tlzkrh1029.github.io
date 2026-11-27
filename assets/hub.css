@@ -9,8 +9,8 @@
   --gold-hover: #F0C35E;
   --ink: #14110A;
   --line: rgba(237, 235, 230, 0.14);
-  --display: 'Instrument Serif', 'Times New Roman', serif;
-  --serif: 'Newsreader', Georgia, serif;
+  --display: 'Instrument Serif', 'Noto Serif KR', 'Times New Roman', serif;
+  --serif: 'Newsreader', 'Noto Serif KR', Georgia, serif;
   --sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
@@ -38,7 +38,7 @@ html { scrollbar-gutter: stable; }
    frames hang exactly where the light found them. Each frame is placed by its
    centre (--x, --y, percent of the wall) and sized by --w, percent of the wall
    width; on screens wider than 1.95:1 the size follows the height instead, so
-   the slight overlaps never grow. */
+   the gaps between frames keep their proportions. */
 .wall {
   --pad: clamp(8px, 0.75vw, 14px);
   --cap: 1.95svh;
@@ -66,26 +66,30 @@ html { scrollbar-gutter: stable; }
   transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.45s ease, outline-color 0.3s ease;
 }
 .hang img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: top; }
-.p1 { --x: 18;   --y: 30.5; --w: 28.5; }
-.p2 { --x: 44.2; --y: 22;   --w: 21.7; }
-.p3 { --x: 68.4; --y: 28.4; --w: 24.6; }
-.p4 { --x: 92.4; --y: 22.3; --w: 20.2; }
-.p5 { --x: 12.5; --y: 69.4; --w: 22.4; }
-.p6 { --x: 37.3; --y: 66;   --w: 24.6; }
-.p7 { --x: 61.4; --y: 68.4; --w: 21; }
-.p8 { --x: 84.9; --y: 65.7; --w: 24; }
-.p9 { --x: 90.7; --y: 91.6; --w: 16.5; }
+/* Two rows of five: p1 to p5 along the top, p6 to p10 along the bottom, with
+   the title in the band between them. */
+.p1  { --x: 10.4; --y: 22.4; --w: 20.4; }
+.p2  { --x: 30.2; --y: 14.6; --w: 17.6; }
+.p3  { --x: 50;   --y: 17;   --w: 19.6; }
+.p4  { --x: 69.8; --y: 14;   --w: 17.4; }
+.p5  { --x: 89.6; --y: 21.8; --w: 20.6; }
+.p6  { --x: 11;   --y: 66;   --w: 19.8; }
+.p7  { --x: 30.6; --y: 72.4; --w: 18; }
+.p8  { --x: 50.2; --y: 73.2; --w: 19.4; }
+.p9  { --x: 70;   --y: 71.8; --w: 17.8; }
+.p10 { --x: 89.4; --y: 66.6; --w: 20.4; }
 @media (orientation: portrait) {
   .wall { --cap: 0.56svh; }
-  .p1 { --x: 31;   --y: 17.3; --w: 54; }
-  .p2 { --x: 79;   --y: 11.9; --w: 34; }
-  .p3 { --x: 78.5; --y: 29.7; --w: 39; }
-  .p4 { --x: 28;   --y: 39.6; --w: 44; }
-  .p5 { --x: 74;   --y: 49.6; --w: 44; }
-  .p6 { --x: 27;   --y: 60.9; --w: 46; }
-  .p7 { --x: 75;   --y: 70.3; --w: 42; }
-  .p8 { --x: 29;   --y: 81.9; --w: 46; }
-  .p9 { --x: 76;   --y: 89.6; --w: 38; }
+  .p1  { --x: 30;   --y: 16.6; --w: 50; }
+  .p2  { --x: 78;   --y: 11.8; --w: 32; }
+  .p3  { --x: 77.5; --y: 27.4; --w: 36; }
+  .p4  { --x: 27;   --y: 35;   --w: 41; }
+  .p5  { --x: 73;   --y: 43.6; --w: 41; }
+  .p6  { --x: 27;   --y: 52.8; --w: 43; }
+  .p7  { --x: 74;   --y: 61.2; --w: 39; }
+  .p8  { --x: 28;   --y: 70.4; --w: 43; }
+  .p9  { --x: 75;   --y: 78.6; --w: 35; }
+  .p10 { --x: 27;   --y: 88;   --w: 37; }
 }
 
 /* A small brass plate on the bottom-left corner of each frame: number and
@@ -128,7 +132,6 @@ html { scrollbar-gutter: stable; }
   .tag { padding-top: calc(4px + 0.01em); padding-bottom: 4.5px; }
   .tag .tno, .tag .tcode, .tag .ttitle { text-box: trim-both cap alphabetic; }
 }
-.p9 .tag { top: 0; bottom: auto; transform: translateY(-50%); }
 .tag .tno, .tag .tcode { font-style: italic; -webkit-text-stroke: 0.42px currentColor; }
 .tag .tno { letter-spacing: 0; }
 .tag .tcode { margin-right: -0.04em; }   /* no letter-spacing after the last letter */
