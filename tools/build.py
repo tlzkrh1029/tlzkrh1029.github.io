@@ -71,6 +71,12 @@ def meta(w):
     return '%s · %s · %s' % (E(w['platform']), E(' + '.join(w['tools'])), nice_date(w['date']))
 
 
+def plate_word(code):
+    """The plate's word. An underscore is lifted onto the baseline (see .us in hub.css), so a word
+    like 365_SMA keeps the same 4px between its ink and the plate's lower border as one without."""
+    return E(code).replace('_', '<span class="us">_</span>')
+
+
 def hang(w):
     """One frame on the wall, with its brass plate (number and word; the short title joins on hover)."""
     return ('<a class="hang p%d" id="hang-%s" data-id="%s" href="%s" target="_blank" rel="noopener" '
@@ -81,7 +87,7 @@ def hang(w):
             % (w['slot'], E(w['id']), E(w['id']), E(w['url']), w['no'], E(w['title']), E(w['shot']),
                ' fetchpriority="high"' if w['slot'] == 1 else '',
                LEFT_BEARING.get(('%02d' % w['no'])[0], 0), RIGHT_BEARING.get(w['code'][-1:].upper(), 0),
-               w['no'], E(w['code']), E(w['short']), ARROW))
+               w['no'], plate_word(w['code']), E(w['short']), ARROW))
 
 
 def wall_text(w):
@@ -221,7 +227,7 @@ def build():
         '<form class="answer-form" id="door-form" autocomplete="off">',
         '<label for="door-word">YOUR COUNTERSIGN</label>',
         '<div class="answer">',
-        '<input id="door-word" name="word" type="text" maxlength="12" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go">',
+        '<input id="door-word" name="word" type="text" maxlength="16" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="go">',
         '<span class="mirror" aria-hidden="true"><span id="mirror"></span><span class="caret"></span></span>',
         '</div>',
         '<p class="said" id="door-said" aria-live="polite"></p>',
